@@ -12,55 +12,63 @@
 namespace cva {
 	namespace ublas = boost::numeric::ublas;
 
-	template<typename T, typename U>
+	template<typename Derived>
 	class CvaCalculator {
 	public:
-	private:
-
+		const Derived& operator()() const 
+		{
+			return static_cast<const Derived&>(*this);
+		}
 	};
-	template <typename T>
-	T calcCvaUsingExplicitExposure(
-		const ublas::vector<boost::function<
-		T(const T&) > >& exposureFunctions,
-		const Path<T>& path, const double dt)
-	{
-		T cvaValue(0.0);
-		for (std::size_t pathIndex = 0; 
-		pathIndex < path.pathNum(); ++pathIndex) {
-			T pathwiseValue(0.0);
-			for (std::size_t gridIndex = 1; 
-			gridIndex <= path.gridNum(); ++gridIndex) {
-				pathwiseValue += cva::zeroFloor(
-					exposureFunctions(gridIndex)(
-						path.getPathValue(pathIndex, gridIndex)));
-			}
-			cvaValue += pathwiseValue;
-		}
-		return cvaValue * dt / static_cast<double>(path.pathNum());
-	}
 
-	template <typename T, typename U>
-	T calcCvaUsingImplicitExposure(
-		const ublas::vector<boost::function<
-		T (const T&) > >& exposureFunctions,
-		const Path<T>& path, const PayOff<U>& payoff,
-		const double dt)
-	{
-		T cvaValue(0.0);
-		for (std::size_t pathIndex = 0;
-		pathIndex < path.pathNum(); ++pathIndex) {
-			T pathwiseValue(0.0);
-			for (std::size_t gridIndex = 1;
-			gridIndex <= path.gridNum(); ++gridIndex) {
-				if ((exposureFunctions(gridIndex)(
-					path.getPathValue(pathIndex, gridIndex))).value() > 0.0) {
-					pathwiseValue += 
-						payoff()(path.getTimewisePath(pathIndex));
+	class ExplicitCalculator : public CvaCalculator<ExplicitCalculator> {
+	public:
+		ExplicitCalculator() {}
+		template <typename T, typename P>
+		T operator()(const ublas::vector<boost::function<
+			T(const T&) > >& exposureFunctions,
+			const Path<T>& path, const PayOff<P>& payoff) const
+		{
+			T cvaValue(0.0);
+			for (std::size_t pathIndex = 0;
+			pathIndex < path.pathNum(); ++pathIndex) {
+				T pathwiseValue(0.0);
+				for (std::size_t gridIndex = 1;
+				gridIndex <= path.gridNum(); ++gridIndex) {
+					pathwiseValue += cva::zeroFloor(
+						exposureFunctions(gridIndex)(
+							path.getPathValue(pathIndex, gridIndex)));
 				}
+				cvaValue += pathwiseValue;
 			}
-			cvaValue += pathwiseValue;
+			return cvaValue * path.dt() / static_cast<double>(path.pathNum());
 		}
-		return cvaValue * dt / static_cast<double>(path.pathNum());
-	}
+	};
+
+	class ImplicitCalculator : public CvaCalculator<ImplicitCalculator> {
+	public:
+		ImplicitCalculator() {}
+		template <typename T, typename P>
+		T operator()(const ublas::vector<boost::function<
+			T(const T&) > >& exposureFunctions,
+			const Path<T>& path, const PayOff<P>& payoff) const
+		{
+			T cvaValue(0.0);
+			for (std::size_t pathIndex = 0;
+			pathIndex < path.pathNum(); ++pathIndex) {
+				T pathwiseValue(0.0);
+				for (std::size_t gridIndex = 1;
+				gridIndex <= path.gridNum(); ++gridIndex) {
+					if ((exposureFunctions(gridIndex)(
+						path.getPathValue(pathIndex, gridIndex))).value() > 0.0) {
+						pathwiseValue +=
+							payoff()(path.getTimewisePath(pathIndex));
+					}
+				}
+				cvaValue += pathwiseValue;
+			}
+			return cvaValue * path.dt() / static_cast<double>(path.pathNum());
+		}
+	};
 
 }//namespace cva

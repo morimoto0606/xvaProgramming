@@ -150,6 +150,7 @@
     <ClInclude Include="analytic_exposure_traits.h" />
     <ClInclude Include="CvaCalculator.h" />
     <ClInclude Include="CvaCalculatorByAnalytic.h" />
+    <ClInclude Include="cva_calculator_traits.h" />
     <ClInclude Include="Dual.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="function_traits.h" />
@@ -158,6 +159,7 @@
     <ClInclude Include="Path.h" />
     <ClInclude Include="PathMaker.h" />
     <ClInclude Include="Payoff.h" />
+    <ClInclude Include="promote_traits.h" />
     <ClInclude Include="Regression.h" />
     <ClInclude Include="RegressionExposure.h" />
     <ClInclude Include="stdafx.h" />

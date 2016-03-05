@@ -1,5 +1,4 @@
-#ifndef DUAL_H_INCLUDED
-#define DUAL_H_INCLUDED
+#pragma once
 #include <boost/numeric/ublas/functional.hpp>
 #include <boost/numeric/ublas/matrix_expression.hpp>
 namespace cva {
@@ -244,41 +243,3 @@ namespace boost {
 		}
 	}
 }
-
-//
-//namespace ublas = boost::numeric::ublas;
-//template<>
-//struct ublas::matrix_scalar_real_unary_functor<cva::Dual<double> > {
-//	typedef typename double value_type;
-//	typedef typename double real_type;
-//	typedef real_type result_type;
-//};
-//
-//template<>
-//struct ublas::matrix_norm_inf<cva::Dual<double> > :
-//	public ublas::matrix_scalar_real_unary_functor<cva::Dual<double> > {
-//	typedef typename double value_type;
-//	typedef typename double real_type;
-//	typedef typename double result_type;
-//
-//	template<class E>
-//	static BOOST_UBLAS_INLINE
-//		result_type apply(const matrix_expression<E> &e) {
-//		real_type t = real_type();
-//		//typedef typename E::size_type matrix_size_type;
-//		//matrix_size_type size1(e().size1());
-//		//for (matrix_size_type i = 0; i < size1; ++i) {
-//		//	real_type u = real_type();
-//		//	matrix_size_type size2(e().size2());
-//		//	for (matrix_size_type j = 0; j < size2; ++j) {
-//		//		real_type v(type_traits<value_type>::norm_inf(e() (i, j)));
-//		//		u += v;
-//		//	}
-//		//	if (u > t)
-//		//		t = u;
-//		//}
-//		return t;
-//	}
-//};
-
-#endif

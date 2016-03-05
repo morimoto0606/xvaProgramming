@@ -22,7 +22,7 @@ namespace cva {
 		Path(const value_type& x0, const value_type& mu,
 			const value_type& sigma, const size_type pathNum,
 			const size_type gridNum, const double dt,
-			const size_type seed)
+			const size_type seed) : _dt(dt)
 		{
 			//Generate Random Number by MT
 			boost::mt19937 gen(seed);
@@ -89,8 +89,13 @@ namespace cva {
 		size_type gridNum() const {
 			return _pathMatrix.size2() - 1;
 		}
+		double dt() const { return _dt; }
+		double maturity() const { 
+			return _dt * (gridNum() + 1.0);
+		}
 	private:
 		ublas::matrix<value_type> _pathMatrix;
+		double _dt;
 	};
 } //namespace cva
 #endif

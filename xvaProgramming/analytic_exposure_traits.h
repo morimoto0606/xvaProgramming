@@ -12,14 +12,15 @@ namespace cva {
 
 	template<typename P>
 	struct analytic_exposure_traits {
+	public:
 		typedef P payoff_type;
-		typedef ublas::vector<boost::function<Dual<double>(
-			const Dual<double>&)> > result_type;
-		static result_type apply(const double mu,
-			const double sigma, const std::size_t gridNum,
+	public:
+		template <typename T>
+		static ublas::vector<boost::function<T (const T&)>> apply(
+			const T& mu, const T& sigma, const std::size_t gridNum,
 			const double maturity, const payoff_type& payoff)
 		{
-			return result_type();
+			return ublas::vector<boost::function<T(const T&)>>();
 		}
 	};
 
@@ -28,20 +29,19 @@ namespace cva {
 		typedef Forward payoff_type;
 		typedef ublas::vector<boost::function<Dual<double>(
 			const Dual<double>&)> > result_type;
-		static result_type appry(const double mu,
-			const double sigma, const std::size_t gridNum,
+		template <typename T>
+		static ublas::vector<boost::function<T(const T&)>> apply(
+			const T& mu, const T& sigma, const std::size_t gridNum,
 			const double maturity, const payoff_type& payoff)
 		{
-			ublas::vector<boost::function<Dual<double>(
-				const Dual<double>&)> > fwdFunctions(gridNum + 1);
+			ublas::vector<boost::function<T (const T&)>> fwdFunctions(gridNum + 1);
 			for (std::size_t gridIndex = 0; gridIndex <= gridNum; ++gridIndex) {
 				const double tau = maturity
 					* static_cast<double>(gridNum - gridIndex)
 					/ static_cast<double>(gridNum);
 				fwdFunctions(gridIndex)
-					= boost::bind(forwardFunction<Dual<double> >, _1,
-						Dual<double>(mu), Dual<double>(sigma),
-						payoff.gearing(), payoff.strike(), tau);
+					= boost::bind(forwardFunction<T>, _1,
+						mu, sigma, payoff.gearing(), payoff.strike(), tau);
 			}
 			return fwdFunctions;
 		}
@@ -51,19 +51,20 @@ namespace cva {
 		typedef European payoff_type;
 		typedef ublas::vector<boost::function<Dual<double>(
 			const Dual<double>&)> > result_type;
-		static result_type appry(const double mu,
-			const double sigma, const std::size_t gridNum,
+		
+		template <typename T>
+		static ublas::vector<boost::function<T(const T&)>> apply(
+			const T& mu, const T& sigma, const std::size_t gridNum,
 			const double maturity, const payoff_type& payoff)
 		{
-			result_type eurFunctions(gridNum + 1);
+			ublas::vector<boost::function<T(const T&)>> eurFunctions(gridNum + 1);
 			for (std::size_t gridIndex = 0; gridIndex <= gridNum; ++gridIndex) {
 				const double tau = maturity
 					* static_cast<double>(gridNum - gridIndex)
 					/ static_cast<double>(gridNum);
 				eurFunctions(gridIndex)
-					= boost::bind(europeanFunction<Dual<double> >, _1,
-						Dual<double>(mu), Dual<double>(sigma),
-						payoff.gearing(), payoff.strike(), payoff.shiftAmount(),
+					= boost::bind(europeanFunction<T>, _1,
+						mu, sigma, payoff.gearing(), payoff.strike(), payoff.shiftAmount(),
 						tau);
 			}
 			return eurFunctions;
@@ -72,13 +73,12 @@ namespace cva {
 	template<>
 	struct analytic_exposure_traits<Mountain> {
 		typedef Mountain payoff_type;
-		typedef ublas::vector<boost::function<Dual<double>(
-			const Dual<double>&)> > result_type;
-		static result_type appry(const double mu,
-			const double sigma, const std::size_t gridNum,
+		template <typename T>
+		static ublas::vector<boost::function<T(const T&)>> apply(
+			const T& mu, const T& sigma, const std::size_t gridNum,
 			const double maturity, const payoff_type& payoff)
 		{
-			result_type functions(gridNum + 1);
+			ublas::vector<boost::function<T(const T&)>> functions(gridNum + 1);
 			for (std::size_t gridIndex = 0; gridIndex <= gridNum; ++gridIndex) {
 				const double tau = maturity
 					* static_cast<double>(gridNum - gridIndex)
