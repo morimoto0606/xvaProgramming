@@ -3,6 +3,7 @@
 
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
+#include "Functions.h"
 
 namespace cva {
 	namespace ublas = boost::numeric::ublas;
