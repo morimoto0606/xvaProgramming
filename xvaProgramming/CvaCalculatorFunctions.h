@@ -10,13 +10,12 @@
 #include "PathMaker.h"
 #include "analytic_exposure_traits.h"
 #include "CvaCalculator.h"
+#include "RegressionExposure.h"
 
 namespace cva {
 	namespace ublas = boost::numeric::ublas;
 
 	//Calculate Cva By Analytic Exposure
-	//calclate df/dx, input x = Dual(x0, 1.0), mu = Dual(mu0, 0), sigma = Dual(sigma0, 0)
-	//calclate df/dsigma, input x = Dual(x0, 0), mu = Dual(mu0, 0), sigma = Dual(sigma0, 1.0)
 	template <typename T, typename P, typename C>
 	T calcCvaByAnalyticExposure(
 		const Path<T>& path,
@@ -29,5 +28,22 @@ namespace cva {
 			exposureFunctions, path, payoff());
 		return cvaValue;
 	}
+
+	//Calculate Cva By Regression Exposure	
+	template <typename T, typename U, typename P, typename C>
+	T calcCvaByRegressionExposure(
+		const Path<U>& pathForRegression,
+		const Path<T>& pathForMonte,
+		const PayOff<P>& payoff,
+		const std::size_t numOfBasis,
+		const CvaCalculator<C>& calculator)
+	{
+		ublas::vector<boost::function<Dual<double>(
+			const Dual<double>&)> > lsmFunctions =
+			makeLsmFunctions(numOfBasis, pathForRegression, payoff);
+		Dual<double> cvaValue = calculator()(lsmFunctions, pathForMonte, payoff);
+		return cvaValue;
+	}
+
 
 }//namespace cva

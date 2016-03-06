@@ -45,21 +45,6 @@ namespace cva {
 		return cvaValue;
 	}
 
-	//Calculate Cva By Regression Exposure	
-	template <typename T, typename U, typename P, typename C>
-	T calcCvaByRegressionExposure(
-		const Path<U>& pathForRegression,
-		const Path<T>& pathForMonte,
-		const PayOff<P>& payoff, 
-		const std::size_t numOfBasis,
-		const CvaCalculator<C>& calculator)
-	{
-		ublas::vector<boost::function<Dual<double>(
-			const Dual<double>&)> > lsmFunctions =
-			makeLsmFunctions(numOfBasis, pathForRegression, payoff);
-		Dual<double> cvaValue = calculator()(lsmFunctions, pathForMonte, payoff);
-		return cvaValue;
-	}
 
 	template <typename P, typename C>
 	ublas::vector<boost::function<Dual<double>(
