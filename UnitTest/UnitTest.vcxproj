@@ -160,12 +160,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AnalyticExposureTest.cpp" />
+    <ClCompile Include="CvaByAnalyticExposureTest.cpp" />
     <ClCompile Include="DualTest.cpp" />
     <ClCompile Include="function_traitsTest.cpp" />
     <ClCompile Include="PathTest.cpp" />
     <ClCompile Include="PayoffTest.cpp" />
-    <ClCompile Include="RegressionExposureTest.cpp" />
+    <ClCompile Include="CvaByRegressionExposureTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
