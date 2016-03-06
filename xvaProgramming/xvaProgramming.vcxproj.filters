@@ -54,9 +54,6 @@
     <ClInclude Include="Functions.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="LsmFunction.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="LsmFunctions.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>

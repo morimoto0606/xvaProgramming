@@ -16,18 +16,8 @@ namespace UnitTest
 			x(0) = 100;
 			x(1) = 125.54334;
 			cva::Forward payoff(2.0, 100);
-			Assert::AreEqual(
-				// Expected value:
-				payoff(x),
-				// Actual value:
-				2.0 * (x(1) - 100.0),
-				// Tolerance:
-				1e-10,
-				// Message:
-				L"Basic test failed",
-				// Line number - used if there is no PDB file:
-				LINE_INFO());
-		}
+			Assert::AreEqual(2.0 * (x(1) - 100), payoff(x), 1e-10);
+			}
 		TEST_METHOD(EuropeanPayoff)
 		{
 			ublas::vector<double> x(2);
@@ -36,11 +26,11 @@ namespace UnitTest
 			cva::European payoff(2.0, 100.0, -10.0);
 			Assert::AreEqual(
 				// Expected value:
-				payoff(x),
+				2.0 * std::max(x(1) - 100.0, 0.0) - 10.0,
 				// Actual value:
-				std::max(2.0 * (x(1) - 100.0), 0.0) - 10.0,
+				payoff(x),
 				// Tolerance:
-				1e-10,
+				1e-5,
 				// Message:
 				L"Basic test failed",
 				// Line number - used if there is no PDB file:

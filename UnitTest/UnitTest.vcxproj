@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="CvaByAnalyticExposureTest.cpp" />
     <ClCompile Include="DualTest.cpp" />
+    <ClCompile Include="FunctionsTest.cpp" />
     <ClCompile Include="function_traitsTest.cpp" />
     <ClCompile Include="PathTest.cpp" />
     <ClCompile Include="PayoffTest.cpp" />

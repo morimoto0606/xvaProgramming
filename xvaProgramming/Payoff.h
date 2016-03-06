@@ -21,9 +21,10 @@ namespace cva {
 		Forward(const double& a, const double& b) : _a(a), _b(b) {}
 		
 		template <typename T>
-		typename T operator()(const ublas::vector_expression<T>& x) const
+		typename T::value_type operator()(
+			const ublas::vector_expression<T>& x) const
 		{
-			return *(x().end() - 1) * _a - _b;
+			return _a * (*(x().end() - 1) - _b);
 		}
 		double gearing() const { return _a; }
 		double strike() const { return _b; }
@@ -45,9 +46,10 @@ namespace cva {
 		European(const double& a, const double& b)
 			: _a(a), _b(b), _c(0.0) {}
 		template <typename T>
-		typename T operator()(const ublas::vector_expression<T>& x) const
+		typename T::value_type operator()(
+			const ublas::vector_expression<T>& x) const
 		{
-			return cva::zeroFloor(_a * *(x().end() - 1) - _b) + _c;
+			return _a * cva::zeroFloor(*(x().end() - 1) - _b) + _c;
 		}
 		double gearing() const { return _a; }
 		double strike() const { return _b; }
@@ -69,7 +71,8 @@ namespace cva {
 		: _a(a), _b1(b1), _b2(b2) {}
 
 		template <typename T>
-		T operator()(const ublas::vector_expression<T>& x) const
+		typename T::value_type operator()(
+			const ublas::vector_expression<T>& x) const
 		{
 			return cva::zeroFloor(_a * *(x().end() - 1) - _b1)
 				- cva::zeroFloor(_b2 -_a * *(x().end() - 1));
@@ -96,7 +99,8 @@ namespace cva {
 		: _a(a), _b1(b1), _b2(b2), _b3(b3), _b4(b4), _c(c) {}
 
 		template <typename T>
-		typename T operator()(const ublas::vector_expression<T>& x) const
+		typename T::value_type operator()(
+			const ublas::vector_expression<T>& x) const
 		{
 			return cva::zeroFloor(_a * *(x().end() - 1) - _b1)
 				- cva::zeroFloor(_a * *(x().end() - 1) - _b2)

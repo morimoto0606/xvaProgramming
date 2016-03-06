@@ -98,9 +98,10 @@ namespace cva{
 		: _grid(grid), _order(order) {}
 		
 		template <typename T>
-		T operator()(const ublas::vector_expression<T>& x) const
+		typename T::value_type
+			operator()(const ublas::vector_expression<T>& x) const
 		{
-			return _order == 0.0 ? 1.0 : std::pow(x()(_grid), _order);
+			return _order == 0.0 ? 1.0 : std::pow((x()(_grid)), _order);
 		}
 	private:
 		std::size_t _order;
@@ -113,11 +114,11 @@ namespace cva{
 			: _grid(grid), _order(order) {}
 
 		template <typename T>
-		T operator()(const ublas::vector_expression<T>& x) const
+		typename T::value_type operator()(const ublas::vector_expression<T>& x) const
 		{			
 			return _order == 0.0 
 				? 1.0
-				: std::pow(std::accumulate(x().begin(), x().begin() + _grid), _order);
+				: std::pow(std::accumulate(x().begin(), x().begin() + _grid + 1, 0.0), _order);
 		}
 	private:
 		std::size_t _order;

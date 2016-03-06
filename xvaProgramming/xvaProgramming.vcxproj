@@ -153,7 +153,6 @@
     <ClInclude Include="Dual.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="function_traits.h" />
-    <ClInclude Include="LsmFunction.h" />
     <ClInclude Include="LsmFunctions.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="PathMaker.h" />
