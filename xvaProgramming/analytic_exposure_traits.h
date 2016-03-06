@@ -10,18 +10,18 @@
 namespace cva {
 	namespace ublas = boost::numeric::ublas;
 
+	template <typename T, typename P>
+	auto makeAnalyticExposureFunctions
+		(const Path<T>& path, const P& payoff)
+	{
+		return analytic_exposure_traits<P>::apply(
+			path.mu(), path.sigma(), path.gridNum(), path.maturity(), payoff);
+	}
+
 	template<typename P>
 	struct analytic_exposure_traits {
 	public:
 		typedef P payoff_type;
-	public:
-		template <typename T>
-		static ublas::vector<boost::function<T (const T&)>> apply(
-			const T& mu, const T& sigma, const std::size_t gridNum,
-			const double maturity, const payoff_type& payoff)
-		{
-			return ublas::vector<boost::function<T(const T&)>>();
-		}
 	};
 
 	template<>

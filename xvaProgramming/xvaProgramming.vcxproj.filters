@@ -36,9 +36,6 @@
     <ClInclude Include="analytic_exposure_traits.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="AnalyticExposure.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="AnalyticOptionFunctions.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -75,7 +72,7 @@
     <ClInclude Include="promote_traits.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="cva_calculator_traits.h">
+    <ClInclude Include="CvaCalculatorFunctions.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

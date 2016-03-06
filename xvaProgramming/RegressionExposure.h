@@ -9,6 +9,7 @@
 #include "LsmFunction.h"
 #include <boost/bind.hpp>
 #include "PathMaker.h"
+#include "CvaCalculator.h"
 
 namespace cva {
 	namespace ublas = boost::numeric::ublas;
@@ -45,32 +46,18 @@ namespace cva {
 	}
 
 	//Calculate Cva By Regression Exposure	
-	template <typename P, typename C>
-	Dual<double> calcCvaByRegressionExposure(
-		const double x0, const double mu, const double sigma,
-		const PayOff<P>& payoff, const double maturity,
-		const std::size_t gridNum, const std::size_t pathNumForRegression,
-		const std::size_t pathNumForMonte,
+	template <typename T, typename U, typename P, typename C>
+	T calcCvaByRegressionExposure(
+		const Path<U>& pathForRegression,
+		const Path<T>& pathForMonte,
+		const PayOff<P>& payoff, 
 		const std::size_t numOfBasis,
-		const shockTypeEnum shockType, const std::size_t seed,
-		const bool useImplicitMethod, const bool isCoeffShock)
+		const CvaCalculator<C>& calculator)
 	{
-		const double dt = maturity / gridNum;
-		const Path<C> pathForRegression
-			= makePath<C>(x0, mu, sigma, dt, gridNum,
-				pathNumForRegression, shockType, seed);
-
-		const Path<Dual<double> > pathForMonte
-			= makePath<Dual<double> >(x0, mu, sigma, dt, gridNum,
-				pathNumForMonte, shockType, seed);
-
 		ublas::vector<boost::function<Dual<double>(
 			const Dual<double>&)> > lsmFunctions =
 			makeLsmFunctions(numOfBasis, pathForRegression, payoff);
-
-		Dual<double> cvaValue = useImplicitMethod
-			? calcCvaUsingImplicitExposure(lsmFunctions, pathForMonte, payoff, dt)
-			: calcCvaUsingExplicitExposure(lsmFunctions, pathForMonte, dt);
+		Dual<double> cvaValue = calculator()(lsmFunctions, pathForMonte, payoff);
 		return cvaValue;
 	}
 

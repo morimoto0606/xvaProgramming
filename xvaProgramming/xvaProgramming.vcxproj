@@ -145,12 +145,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AnalyticExposure.h" />
+    <ClInclude Include="CvaCalculatorFunctions.h" />
     <ClInclude Include="AnalyticOptionFunctions.h" />
     <ClInclude Include="analytic_exposure_traits.h" />
     <ClInclude Include="CvaCalculator.h" />
     <ClInclude Include="CvaCalculatorByAnalytic.h" />
-    <ClInclude Include="cva_calculator_traits.h" />
     <ClInclude Include="Dual.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="function_traits.h" />
