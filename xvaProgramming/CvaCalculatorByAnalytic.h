@@ -12,7 +12,6 @@
 namespace cva {
 	namespace ublas = boost::numeric::ublas;
 
-
 	Dual<double> calcCvaFwdByAnalytic(
 		const double x0, const double mu, const double sigma,
 		const Forward& payoff, const double maturity,

@@ -2,7 +2,10 @@
 #define FUNCTIONS_H_INCLUDED
 
 #include "function_traits.h"
+#include <boost/numeric/ublas/vector_expression.hpp>
+#include <numeric>
 
+namespace ublas = boost::numeric::ublas;
 namespace cva{
 	template <typename T>
 	typename zero_floor_traits<T>::value_type
@@ -88,6 +91,39 @@ namespace cva{
 		double _order1;
 		double _order2;
 	};
+
+	class PathwiseMonomial {
+	public:
+		PathwiseMonomial(const std::size_t grid,  std::size_t order) 
+		: _grid(grid), _order(order) {}
+		
+		template <typename T>
+		T operator()(const ublas::vector_expression<T>& x) const
+		{
+			return _order == 0.0 ? 1.0 : std::pow(x()(_grid), _order);
+		}
+	private:
+		std::size_t _order;
+		std::size_t _grid;
+	};
+
+	class PathwiseSum {
+	public:
+		PathwiseSum(const std::size_t grid, std::size_t order)
+			: _grid(grid), _order(order) {}
+
+		template <typename T>
+		T operator()(const ublas::vector_expression<T>& x) const
+		{			
+			return _order == 0.0 
+				? 1.0
+				: std::pow(std::accumulate(x().begin(), x().begin() + _grid), _order);
+		}
+	private:
+		std::size_t _order;
+		std::size_t _grid;
+	};
+
 } //namespace cva
 
 namespace boost {	namespace numeric {	namespace ublas {
