@@ -4,6 +4,8 @@
 #include <Payoff.h>
 #include <CvaCalculator.h>
 #include <CvaCalculatorFunctions.h>
+#include <BasisFunctions.h>
+#include <boost/assign.hpp>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace cva;
@@ -33,7 +35,16 @@ namespace UnitTest
 			const Path<double> pathForRegression(x0, mu0, sigma0, pathNumForRegression, gridNum, dt, seed);
 			const Path<Dual<double> > pathForMonte(x, mu, sigma, pathNumForMonte, gridNum, dt, seed);
 			cva::ExplicitCalculator calculator;
-			Dual<double> cva = calcCvaByRegressionExposure(pathForRegression, pathForMonte, payoff, 3, calculator);
+			
+			ublas::vector<cva::BasisFunctions<cva::Dual<double>, cva::Dual<double>>> basisSeries(gridNum);
+			for (std::size_t i = 0; i < gridNum; ++i) {
+				ublas::vector<boost::function<cva::Dual<double>(cva::Dual<double>)>> basis(3);
+				basis(0) = cva::Monomial(0);
+				basis(1) = cva::Monomial(1);
+				basis(2) = cva::Monomial(2);
+				basisSeries(i) = cva::BasisFunctions<cva::Dual<double>, cva::Dual<double>>(basis);
+			}
+			Dual<double> cva = calcCvaByRegressionExposure(pathForRegression, pathForMonte, basisSeries, payoff, calculator);
 
 			Assert::AreEqual(256.605, cva.value(), 1e-2);
 			Assert::AreEqual(5.97821, cva.deriv(), 1e-2);
@@ -59,8 +70,16 @@ namespace UnitTest
 			const Path<double> pathForRegression(x0, mu0, sigma0, pathNumForRegression, gridNum, dt, seed);
 			const Path<Dual<double> > pathForMonte(x, mu, sigma, pathNumForMonte, gridNum, dt, seed);
 			cva::ImplicitCalculator calculator;
+			ublas::vector<cva::BasisFunctions<cva::Dual<double>, cva::Dual<double>>> basisSeries(gridNum);
+			for (std::size_t i = 0; i < gridNum; ++i) {
+				ublas::vector<boost::function<cva::Dual<double>(cva::Dual<double>)>> basis(3);
+				basis(0) = cva::Monomial(0);
+				basis(1) = cva::Monomial(1);
+				basis(2) = cva::Monomial(2);
+				basisSeries(i) = cva::BasisFunctions<cva::Dual<double>, cva::Dual<double>>(basis);
+			}
 			Dual<double> cva = calcCvaByRegressionExposure(
-				pathForRegression, pathForMonte, payoff, 3, calculator);
+				pathForRegression, pathForMonte, basisSeries, payoff, calculator);
 
 			Assert::AreEqual(248.904, cva.value(), 1e-2);
 			Assert::AreEqual(6.25004, cva.deriv(), 1e-2);
@@ -86,7 +105,15 @@ namespace UnitTest
 			const Path<double> pathForRegression(x0, mu0, sigma0, pathNumForRegression, gridNum, dt, seed);
 			const Path<Dual<double> > pathForMonte(x, mu, sigma, pathNumForMonte, gridNum, dt, seed);
 			cva::ExplicitCalculator calculator;
-			Dual<double> cva = calcCvaByRegressionExposure(pathForRegression, pathForMonte, payoff, 3, calculator);
+			ublas::vector<cva::BasisFunctions<cva::Dual<double>, cva::Dual<double>>> basisSeries(gridNum);
+			for (std::size_t i = 0; i < gridNum; ++i) {
+				ublas::vector<boost::function<cva::Dual<double>(cva::Dual<double>)>> basis(3);
+				basis(0) = cva::Monomial(0);
+				basis(1) = cva::Monomial(1);
+				basis(2) = cva::Monomial(2);
+				basisSeries(i) = cva::BasisFunctions<cva::Dual<double>, cva::Dual<double>>(basis);
+			}
+			Dual<double> cva = calcCvaByRegressionExposure(pathForRegression, pathForMonte, basisSeries, payoff, calculator);
 
 			Assert::AreEqual(189.249, cva.value(), 1e-2);
 			Assert::AreEqual(4.69081, cva.deriv(), 1e-2);
@@ -112,8 +139,17 @@ namespace UnitTest
 			const Path<double> pathForRegression(x0, mu0, sigma0, pathNumForRegression, gridNum, dt, seed);
 			const Path<Dual<double> > pathForMonte(x, mu, sigma, pathNumForMonte, gridNum, dt, seed);
 			cva::ImplicitCalculator calculator;
+			ublas::vector<cva::BasisFunctions<cva::Dual<double>, cva::Dual<double>>> basisSeries(gridNum);
+			for (std::size_t i = 0; i < gridNum; ++i) {
+				ublas::vector<boost::function<cva::Dual<double>(cva::Dual<double>)>> basis(3);
+				basis(0) = cva::Monomial(0);
+				basis(1) = cva::Monomial(1);
+				basis(2) = cva::Monomial(2);
+				basisSeries(i) = cva::BasisFunctions<cva::Dual<double>, cva::Dual<double>>(basis);
+			}
+
 			Dual<double> cva = calcCvaByRegressionExposure(
-				pathForRegression, pathForMonte, payoff, 3, calculator);
+				pathForRegression, pathForMonte, basisSeries, payoff, calculator);
 
 			Assert::AreEqual(300.122, cva.value(), 1e-2);
 			Assert::AreEqual(5.42622, cva.deriv(), 1e-2);
