@@ -145,15 +145,17 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BasisFunctions.h" />
     <ClInclude Include="CvaCalculatorFunctions.h" />
     <ClInclude Include="AnalyticOptionFunctions.h" />
     <ClInclude Include="analytic_exposure_traits.h" />
     <ClInclude Include="CvaCalculator.h" />
     <ClInclude Include="CvaCalculatorByAnalytic.h" />
     <ClInclude Include="Dual.h" />
+    <ClInclude Include="Exposure.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="function_traits.h" />
-    <ClInclude Include="LsmFunctions.h" />
+    <ClInclude Include="lsm_exposure_traits.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="PathMaker.h" />
     <ClInclude Include="Payoff.h" />

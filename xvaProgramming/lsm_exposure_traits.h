@@ -4,6 +4,20 @@
 
 namespace cva {
 	namespace ublas = boost::numeric::ublas;
+
+	template <typename T>
+	struct lsm_exposure_traits {
+	public:
+		typedef T value_type;
+	};
+	template <typename T>
+	struct lsm_exposure_traits<ublas::vector_expression<T>>
+	{
+	public:
+		typedef ublas::vector_expression<T> value_type;
+
+	};
+
 	template <typename T, typename C>
 	class LsmFunction {
 	public:
@@ -19,13 +33,18 @@ namespace cva {
 			const ublas::vector <boost::function<result_type(const value_type&)> >&
 			basisFunctions) : _coefficients(coeffs), _basisFunctions(basisFunctions) {}
 
-		result_type operator()(const value_type& x) const
+		ublas::vector<result_type> operator()(const Path<value_type>& path) const
 		{
-			ublas::vector<result_type> value(_coefficients.size());
-			for (std::size_t i = 0; i < _coefficients.size(); ++i) {
-				value(i) = (_basisFunctions(i))(x);
+			ublas::vector<result_type> result(path.pathNum());
+			for (std::size_t pathIndex = 0; pathIndex < path.pathNum(); 
+			++pathIndex) {
+				ublas::vector<result_type> value(_coefficients.size());
+				for (std::size_t i = 0; i < _coefficients.size(); ++i) {
+					value(i) = (_basisFunctions(i))(path(pathIndex));
+				}
+				result(pathIndex) = ublas::inner_prod(value, _coefficients);
 			}
-			return ublas::inner_prod(value, _coefficients);
+			return result;
 		}
 	private:
 		ublas::vector<coeffcient_type> _coefficients;

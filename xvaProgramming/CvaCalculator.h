@@ -5,7 +5,7 @@
 #include "Path.h"
 #include "PayOff.h"
 #include "Regression.h"
-#include "LsmFunctions.h"
+#include "Exposure.h"
 #include <boost/bind.hpp>
 #include "PathMaker.h"
 
@@ -24,20 +24,18 @@ namespace cva {
 	class ExplicitCalculator : public CvaCalculator<ExplicitCalculator> {
 	public:
 		ExplicitCalculator() {}
-		template <typename T, typename P>
-		T operator()(const ublas::vector<boost::function<
-			T(const T&) > >& exposureFunctions,
+		template <typename T, typename P, typename E>
+		T operator()(const Exposure<E>& exposure,
 			const Path<T>& path, const PayOff<P>& payoff) const
 		{
 			T cvaValue(0.0);
 			for (std::size_t pathIndex = 0;
-			pathIndex < path.pathNum(); ++pathIndex) {
+				pathIndex < path.pathNum(); ++pathIndex) {
 				T pathwiseValue(0.0);
 				for (std::size_t gridIndex = 1;
-				gridIndex <= path.gridNum(); ++gridIndex) {
+					gridIndex <= path.gridNum(); ++gridIndex) {
 					pathwiseValue += cva::zeroFloor(
-						exposureFunctions(gridIndex)(
-							path.getPathValue(pathIndex, gridIndex)));
+						exposrue()(path, pathIndex, gridIndex));
 				}
 				cvaValue += pathwiseValue;
 			}
@@ -48,9 +46,8 @@ namespace cva {
 	class ImplicitCalculator : public CvaCalculator<ImplicitCalculator> {
 	public:
 		ImplicitCalculator() {}
-		template <typename T, typename P>
-		T operator()(const ublas::vector<boost::function<
-			T(const T&) > >& exposureFunctions,
+		template <typename T, typename P, typename E>
+		T operator()(const Exposure<E>& exposure,
 			const Path<T>& path, const PayOff<P>& payoff) const
 		{
 			T cvaValue(0.0);
@@ -59,8 +56,7 @@ namespace cva {
 				T pathwiseValue(0.0);
 				for (std::size_t gridIndex = 1;
 				gridIndex <= path.gridNum(); ++gridIndex) {
-					if ((exposureFunctions(gridIndex)(
-						path.getPathValue(pathIndex, gridIndex))).value() > 0.0) {
+					if (exposure()(path, pathIndex, gridIndex) > 0.0) {
 						pathwiseValue +=
 							payoff()(path.getTimewisePath(pathIndex));
 					}

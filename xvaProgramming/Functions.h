@@ -51,7 +51,7 @@ namespace cva{
 	class Monomial {
 	public:
 		explicit Monomial(const double order) : _order(order) {}
-		
+		Monomial(const int order) : _order(static_cast<double>(order)) {}
 		template <typename T>
 		T operator()(const T& x) const
 		{

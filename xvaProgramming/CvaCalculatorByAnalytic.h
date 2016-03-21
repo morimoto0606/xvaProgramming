@@ -5,7 +5,7 @@
 #include "Path.h"
 #include "PayOff.h"
 #include "Regression.h"
-#include "LsmFunction.h"
+#include "lsm_exposure_traits.h"
 #include <boost/bind.hpp>
 #include "PathMaker.h"
 

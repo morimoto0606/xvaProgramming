@@ -10,14 +10,6 @@
 namespace cva {
 	namespace ublas = boost::numeric::ublas;
 
-	template <typename T, typename P>
-	auto makeAnalyticExposureFunctions
-		(const Path<T>& path, const P& payoff)
-	{
-		return analytic_exposure_traits<P>::apply(
-			path.mu(), path.sigma(), path.gridNum(), path.maturity(), payoff);
-	}
-
 	template<typename P>
 	struct analytic_exposure_traits {
 	public:
@@ -27,69 +19,65 @@ namespace cva {
 	template<>
 	struct analytic_exposure_traits<Forward> {
 		typedef Forward payoff_type;
-		typedef ublas::vector<boost::function<Dual<double>(
-			const Dual<double>&)> > result_type;
+
 		template <typename T>
-		static ublas::vector<boost::function<T(const T&)>> apply(
-			const T& mu, const T& sigma, const std::size_t gridNum,
-			const double maturity, const payoff_type& payoff)
+		static const T apply(const Path<T>& path, const std::size_t gridIndex,
+			const std::size_t pathIndex, const payoff_type& payoff)
 		{
-			ublas::vector<boost::function<T (const T&)>> fwdFunctions(gridNum + 1);
-			for (std::size_t gridIndex = 0; gridIndex <= gridNum; ++gridIndex) {
-				const double tau = maturity
-					* static_cast<double>(gridNum - gridIndex)
-					/ static_cast<double>(gridNum);
-				fwdFunctions(gridIndex)
-					= boost::bind(forwardFunction<T>, _1,
-						mu, sigma, payoff.gearing(), payoff.strike(), tau);
-			}
-			return fwdFunctions;
+			const std::size_t gridNum = path.gridNum();
+			const double maturity = path.maturity();
+			const double tau = maturity
+				* static_cast<double>(gridNum - gridIndex)
+				/ static_cast<double>(gridNum);
+			return forwardFunction<T>(
+				path.getPathValue(pathIndex, gridIndex),
+				path.mu(),
+				path.sigma(),
+				payoff.gearing(),
+				payoff.strike(),
+				tau);
 		}
 	};
+
 	template<>
 	struct analytic_exposure_traits<European> {
 		typedef European payoff_type;
-		typedef ublas::vector<boost::function<Dual<double>(
-			const Dual<double>&)> > result_type;
-		
+
 		template <typename T>
-		static ublas::vector<boost::function<T(const T&)>> apply(
-			const T& mu, const T& sigma, const std::size_t gridNum,
-			const double maturity, const payoff_type& payoff)
+		static const T apply(const Path<T>& path, const std::size_t gridIndex,
+			const std::size_t pathIndex, const payoff_type& payoff)
 		{
-			ublas::vector<boost::function<T(const T&)>> eurFunctions(gridNum + 1);
-			for (std::size_t gridIndex = 0; gridIndex <= gridNum; ++gridIndex) {
-				const double tau = maturity
-					* static_cast<double>(gridNum - gridIndex)
-					/ static_cast<double>(gridNum);
-				eurFunctions(gridIndex)
-					= boost::bind(europeanFunction<T>, _1,
-						mu, sigma, payoff.gearing(), payoff.strike(), payoff.shiftAmount(),
-						tau);
-			}
-			return eurFunctions;
+			const std::size_t gridNum = path.gridNum();
+			const double maturity = path.maturity();
+			const double tau = maturity
+				* static_cast<double>(gridNum - gridIndex)
+				/ static_cast<double>(gridNum);
+			return europeanFunction<T>(
+				path.getPathValue(pathIndex, gridIndex),
+				path.mu(),
+				path.sigma(),
+				payoff.gearing(),
+				payoff.strike(),
+				payoff.shiftAmount(),
+				tau);
 		}
 	};
+
 	template<>
 	struct analytic_exposure_traits<Mountain> {
 		typedef Mountain payoff_type;
+
 		template <typename T>
-		static ublas::vector<boost::function<T(const T&)>> apply(
-			const T& mu, const T& sigma, const std::size_t gridNum,
-			const double maturity, const payoff_type& payoff)
+		static const T apply(const Path<T>& path, const std::size_t pathIndex,
+			const std::size_t gridIndex, const payoff_type& payoff)
 		{
-			ublas::vector<boost::function<T(const T&)>> functions(gridNum + 1);
-			for (std::size_t gridIndex = 0; gridIndex <= gridNum; ++gridIndex) {
-				const double tau = maturity
-					* static_cast<double>(gridNum - gridIndex)
-					/ static_cast<double>(gridNum);
-				functions(gridIndex)
-					= boost::bind(mountain<Dual<double> >, _1,
-						Dual<double>(mu), Dual<double>(sigma),
-						payoff.gearing(), payoff.strikes(),
-						payoff.shiftAmount(), tau);
-			}
-			return functions;
+			const double tau = maturity
+				* static_cast<double>(gridNum - gridIndex)
+				/ static_cast<double>(gridNum);
+			return mountain<T>(path.getPathValue(pathIndex, gridIndex),
+				path.mu(), path.sigma(),
+				payoff.gearing(), payoff.strikes(),
+				payoff.shiftAmount(), tau);
 		}
 	};
 }//namespace cva

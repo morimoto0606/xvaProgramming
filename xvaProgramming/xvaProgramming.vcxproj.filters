@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Exposure">
+      <UniqueIdentifier>{4671daa7-b268-4b66-8f42-f854d21d5c69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -33,9 +36,6 @@
     <ClInclude Include="Payoff.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="analytic_exposure_traits.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="AnalyticOptionFunctions.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -54,16 +54,10 @@
     <ClInclude Include="Functions.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="LsmFunctions.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Path.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Regression.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="RegressionExposure.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="promote_traits.h">
@@ -71,6 +65,21 @@
     </ClInclude>
     <ClInclude Include="CvaCalculatorFunctions.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="lsm_exposure_traits.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="analytic_exposure_traits.h">
+      <Filter>ヘッダー ファイル\Exposure</Filter>
+    </ClInclude>
+    <ClInclude Include="Exposure.h">
+      <Filter>ヘッダー ファイル\Exposure</Filter>
+    </ClInclude>
+    <ClInclude Include="RegressionExposure.h">
+      <Filter>ヘッダー ファイル\Exposure</Filter>
+    </ClInclude>
+    <ClInclude Include="BasisFunctions.h">
+      <Filter>ヘッダー ファイル\Exposure</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
