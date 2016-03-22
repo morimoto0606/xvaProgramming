@@ -10,7 +10,7 @@ namespace cva {
 	template <typename Derived>
 	class Exposure {
 	public:
-		const Derived& operator()()
+		const Derived& operator()() const
 		{
 			return static_cast<const Derived&>(*this);
 		}

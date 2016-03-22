@@ -91,7 +91,7 @@ namespace cva {
 		}
 		double dt() const { return _dt; }
 		double maturity() const { 
-			return _dt * (gridNum() + 1.0);
+			return _dt * gridNum();
 		}
 		value_type mu() const { return _mu; }
 		value_type sigma() const { return _sigma; }

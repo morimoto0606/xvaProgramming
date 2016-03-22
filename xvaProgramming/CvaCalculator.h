@@ -35,7 +35,7 @@ namespace cva {
 				for (std::size_t gridIndex = 1;
 					gridIndex <= path.gridNum(); ++gridIndex) {
 					pathwiseValue += cva::zeroFloor(
-						exposrue()(path, pathIndex, gridIndex));
+						exposure()(path, pathIndex, gridIndex));
 				}
 				cvaValue += pathwiseValue;
 			}

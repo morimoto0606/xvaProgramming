@@ -49,6 +49,7 @@ namespace cva {
 		typedef U result_type;
 		typedef boost::function<result_type(const value_type&)> function_type;
 	public:
+		BasisFunctions() {}
 		BasisFunctions(const ublas::vector<function_type>& basisFunctions)
 			: _basisFunctions(basisFunctions) {}
 		template <typename P>
