@@ -21,8 +21,8 @@ namespace cva {
 		typedef Forward payoff_type;
 
 		template <typename T>
-		static const T apply(const Path<T>& path, const std::size_t gridIndex,
-			const std::size_t pathIndex, const payoff_type& payoff)
+		static const T apply(const Path<T>& path, const std::size_t pathIndex,
+			const std::size_t gridIndex, const payoff_type& payoff)
 		{
 			const std::size_t gridNum = path.gridNum();
 			const double maturity = path.maturity();
@@ -44,8 +44,8 @@ namespace cva {
 		typedef European payoff_type;
 
 		template <typename T>
-		static const T apply(const Path<T>& path, const std::size_t gridIndex,
-			const std::size_t pathIndex, const payoff_type& payoff)
+		static const T apply(const Path<T>& path, const std::size_t pathIndex,
+			const std::size_t gridIndex, const payoff_type& payoff)
 		{
 			const std::size_t gridNum = path.gridNum();
 			const double maturity = path.maturity();
