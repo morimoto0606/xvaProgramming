@@ -166,7 +166,10 @@
     <ClCompile Include="function_traitsTest.cpp" />
     <ClCompile Include="PathTest.cpp" />
     <ClCompile Include="PayoffTest.cpp" />
-    <ClCompile Include="CvaByRegressionExposureTest.cpp" />
+    <ClCompile Include="CvaByRegressionExposureTest.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
