@@ -8,6 +8,7 @@
 #include <boost/numeric/ublas/lu.hpp>     
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/type_traits.hpp>
+#include "BasisFunctions.h"
 
 namespace cva {
 	namespace ublas = boost::numeric::ublas;
@@ -24,6 +25,26 @@ namespace cva {
 			for (std::size_t j = 0; j < basisNum; ++j) {
 				basisMatrix(i, j)
 					= (functions(i))(pathValue) * (functions(j))(pathValue);
+			}
+		}
+		return basisMatrix;
+	}
+
+	template <typename T, typename D>
+	ublas::matrix<T> getBasisMatrix(
+		const std::size_t pathIndex,
+		const std::size_t gridIndex,
+		const Path<T>& path,
+		const BasisFunctions<D>& functions)
+	{
+		const std::size_t basisNum = functions.size();
+		ublas::vector<T> coeffient(basisNum);
+		ublas::matrix<T> basisMatrix(basisNum, basisNum);
+		for (std::size_t i = 0; i < basisNum; ++i) {
+			for (std::size_t j = 0; j < basisNum; ++j) {
+				basisMatrix(i, j)
+					= (functions(path, pathIndex, gridIndex))(i)
+					* (functions(path, pathIndex,gridIndex))(j);
 			}
 		}
 		return basisMatrix;
@@ -46,7 +67,24 @@ namespace cva {
 		return payoffMultBasis;
 	}
 	
-	
+	template <typename T, typename U, typename D>
+	ublas::vector<T> calcPayoffMultBasis(
+		const std::size_t pathIndex,
+		const std::size_t gridIndex,
+		const Path<T>& path,
+		const PayOff<U>& payoff,
+		const BasisFunctions<D>& functions)
+	{
+		const std::size_t basisNum = functions.size();
+		T payoffValue = payoff()(path.getTimewisePath(pathIndex));
+		ublas::vector<T> payoffMultBasis(basisNum);
+		for (std::size_t i = 0; i < basisNum; ++i) {
+			payoffMultBasis(i)
+				= functions(path, pathIndex, gridIndex)(i) * payoffValue;
+		}
+		return payoffMultBasis;
+	}
+
 	/* Matrix inversion routine.
 	Uses lu_factorize and lu_substitute in uBLAS to invert a matrix */
 	template<class T>
@@ -107,6 +145,39 @@ namespace cva {
 		// LU Decomposition
 		ublas::matrix<T> basisInverse
 			=ublas::identity_matrix<T>(basisNum, basisNum);
+		bool isScess = invertMatrix(basisMatrix, basisInverse);
+		return ublas::prod(payoffMultBasis, basisInverse);
+	}
+
+	template <typename T, typename U, typename D>
+	ublas::vector<T> regresssion(
+		std::size_t gridIndex,
+		const PayOff<U>& payoff,
+		const Path<T>& path,
+		const BasisFunctions<D>& functions)
+	{
+		const std::size_t basisNum = functions.size();
+		const std::size_t pathNum = path.pathNum();
+
+		// matrix (basis(i) * basis(j))
+		ublas::matrix<T> basisMatrix
+			= ublas::zero_matrix<T>(basisNum, basisNum);
+		//vector (basis(i) *Payoff)
+		ublas::vector<T> payoffMultBasis
+			= ublas::zero_vector<T>(basisNum);
+
+		// take expectation of basisMatrix and payoffBasis
+		for (std::size_t k = 0; k < pathNum; ++k) {
+			basisMatrix += getBasisMatrix(
+				k, gridIndex, path, functions);
+			payoffMultBasis += calcPayoffMultBasis(
+				k, gridIndex, path, payoff, functions);
+		}
+		basisMatrix /= pathNum;
+		payoffMultBasis /= pathNum;
+		// LU Decomposition
+		ublas::matrix<T> basisInverse
+			= ublas::identity_matrix<T>(basisNum, basisNum);
 		bool isScess = invertMatrix(basisMatrix, basisInverse);
 		return ublas::prod(payoffMultBasis, basisInverse);
 	}

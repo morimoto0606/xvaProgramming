@@ -32,21 +32,22 @@ namespace cva {
 		payoff_type _payoff;
 	};
 
-	template <typename V, typename D, typename R, typename P>
-	class RegressionExposure : public Exposure<RegressionExposure<V, D, R, P>> {
+	template <typename V, typename D, typename P>
+	class RegressionExposure : public Exposure<RegressionExposure<V, D, P>> {
 	public:
 		typedef V value_type;
-		typedef BasisFunctions<D, R> basis_type;
+		typedef BasisFunctions<D> basis_type;
 		typedef P payoff_type;
 		typedef ublas::vector<value_type> coefficints_type;
 
 		RegressionExposure(
 			const Path<value_type>& path, 
-			const ublas::vector<const basis_type>& basisSeries,
+			const ublas::vector<basis_type>& basisSeries,
 			const payoff_type& payoff)
 		: _basisSeries(basisSeries), _payoff(payoff)
 		{
-			for (std::size_t gridIndex = 0; gridIndex <= path.gridNum(); ++gridIndex) {
+			_coeffSeries = ublas::vector<coefficints_type>(path.gridNum());
+			for (std::size_t gridIndex = 1; gridIndex <= path.gridNum(); ++gridIndex) {
 				_coeffSeries(gridIndex) = regresssion(gridIndex, payoff, path, _basisSeries(gridIndex));
 			}
 		}
@@ -54,13 +55,13 @@ namespace cva {
 			const std::size_t gridIndx) const
 		{
 			ublas::vector<value_type> basis 
-				= basis_function_traits<D, R>::apply(_basisSeries(gridIndx), path, pathIndex, gridIndx);
-			T result = ublas::inner_prod(_coeffSeries(gridIndx), basis);
+				= _basisSeries(gridIndx)(path, pathIndex, gridIndx);
+			value_type result = ublas::inner_prod(_coeffSeries(gridIndx), basis);
 			return result;
 		}
 	private:
 		payoff_type _payoff;
-		ublas::vector<const basis_type> _basisSeries;
-		ublas::vector<const coefficints_type> _coeffSeries;
+		ublas::vector<basis_type> _basisSeries;
+		ublas::vector<coefficints_type> _coeffSeries;
 	};
 }

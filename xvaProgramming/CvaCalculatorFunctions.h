@@ -28,16 +28,15 @@ namespace cva {
 	}
 
 	//Calculate Cva By Regression Exposure	
-	template <typename T, typename U, typename D, 
-		typename R, typename P, typename C>
+	template <typename T, typename U, typename D,  typename P, typename C>
 	T calcCvaByRegressionExposure(
 		const Path<U>& pathForRegression,
-		const Path<T>& pathForMonte,
-		const ublas::vector<BasisFunctions<D, R>>& basisSeries,
+		const Path<T>& pathForMonte, 
+		const ublas::vector<BasisFunctions<D>>& basisSeries,
 		const PayOff<P>& payoff,
 		const CvaCalculator<C>& calculator)
 	{
-		RegressionExposure<T, D, R, P> exposure(
+		RegressionExposure<T, D, P> exposure(
 			pathForRegression, basisSeries, payoff());
 		T cvaValue = calculator()(exposure, pathForMonte, payoff());
 		return cvaValue;

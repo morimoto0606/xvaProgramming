@@ -75,9 +75,6 @@
     <ClInclude Include="Exposure.h">
       <Filter>ヘッダー ファイル\Exposure</Filter>
     </ClInclude>
-    <ClInclude Include="RegressionExposure.h">
-      <Filter>ヘッダー ファイル\Exposure</Filter>
-    </ClInclude>
     <ClInclude Include="BasisFunctions.h">
       <Filter>ヘッダー ファイル\Exposure</Filter>
     </ClInclude>
