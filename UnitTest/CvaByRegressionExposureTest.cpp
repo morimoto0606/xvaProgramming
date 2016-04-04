@@ -47,8 +47,8 @@ namespace UnitTest
 			Dual<double> cva = calcCvaByRegressionExposure(
 				pathForMonte, pathForMonte, basisSeries, payoff, calculator);
 
-			//Assert::AreEqual(256.605, cva.value(), 1e-2);
-			//Assert::AreEqual(5.97821, cva.deriv(), 1e-2);
+			Assert::AreEqual(214.46804145603323, cva.value(), 1e-2);
+			Assert::AreEqual(5.4806804145603829, cva.deriv(), 1e-2);
 		}
 
 		//TEST_METHOD(CvaLsmForwardImplicit)

@@ -31,7 +31,7 @@ namespace UnitTest
 			
 			Assert::AreEqual(
 				// Expected value:
-				271.98840155308841,
+				236.96797947860327,
 				// Actual value:
 				cvaForward.value(),
 				// Tolerance:
@@ -43,7 +43,7 @@ namespace UnitTest
 
 			Assert::AreEqual(
 				// Expected value:
-				6.4808840155308722,
+				6.8166797947860260,
 				// Actual value:
 				cvaForward.deriv(),
 				// Tolerance:
