@@ -32,8 +32,8 @@ namespace cva {
 			for (std::size_t pathIndex = 0;
 				pathIndex < path.pathNum(); ++pathIndex) {
 				T pathwiseValue(0.0);
-				for (std::size_t gridIndex = 1;
-					gridIndex <= path.gridNum(); ++gridIndex) {
+				for (std::size_t gridIndex = 0;
+					gridIndex < path.gridNum(); ++gridIndex) {
 					pathwiseValue += cva::zeroFloor(
 						exposure()(path, pathIndex, gridIndex));
 				}

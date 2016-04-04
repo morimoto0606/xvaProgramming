@@ -47,7 +47,7 @@ namespace cva {
 		: _basisSeries(basisSeries), _payoff(payoff)
 		{
 			_coeffSeries = ublas::vector<coefficints_type>(path.gridNum());
-			for (std::size_t gridIndex = 1; gridIndex <= path.gridNum(); ++gridIndex) {
+			for (std::size_t gridIndex = 0; gridIndex < path.gridNum(); ++gridIndex) {
 				_coeffSeries(gridIndex) = regresssion(gridIndex, payoff, path, _basisSeries(gridIndex));
 			}
 		}
