@@ -7,10 +7,10 @@
 #include "Regression.h"
 #include "lsm_exposure_traits.h"
 #include <boost/bind.hpp>
-#include "PathMaker.h"
 #include "analytic_exposure_traits.h"
 #include "CvaCalculator.h"
 #include "Exposure.h"
+#include "Regressor.h"
 
 namespace cva {
 	namespace ublas = boost::numeric::ublas;
@@ -28,17 +28,16 @@ namespace cva {
 	}
 
 	//Calculate Cva By Regression Exposure	
-	template <typename T, typename U, typename D,  typename P, typename C>
+	template <typename T, typename R, typename S,  typename P, typename C>
 	T calcCvaByRegressionExposure(
-		const Path<U>& pathForRegression,
-		const Path<T>& pathForMonte, 
-		const ublas::vector<BasisFunctions<D>>& basisSeries,
+		const Path<T>& path,
+		const Regressor<R, P>& regressor,
+		const ublas::vector<BasisFunctions<S>>& basisSeries,
 		const PayOff<P>& payoff,
 		const CvaCalculator<C>& calculator)
 	{
-		RegressionExposure<T, D, P> exposure(
-			pathForRegression, basisSeries, payoff());
-		T cvaValue = calculator()(exposure, pathForMonte, payoff());
+		RegressionExposure<T, R, S, P> exposure(path, basisSeries, regressor);
+		T cvaValue = calculator()(exposure, path, payoff());
 		return cvaValue;
 	}
 

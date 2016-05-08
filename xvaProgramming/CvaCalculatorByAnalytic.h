@@ -7,10 +7,14 @@
 #include "Regression.h"
 #include "lsm_exposure_traits.h"
 #include <boost/bind.hpp>
-#include "PathMaker.h"
 
 namespace cva {
 	namespace ublas = boost::numeric::ublas;
+	enum shockTypeEnum { undEnum = 0, volEnum = 1 };
+	enum productTypeEnum {
+		fwdEnum = 0, eurEnum = 1,
+		rrEnum = 2, mountainEnum = 3
+	};
 
 	Dual<double> calcCvaFwdByAnalytic(
 		const double x0, const double mu, const double sigma,
@@ -26,12 +30,12 @@ namespace cva {
 			: Dual<double>(sigma);
 		const double strike = payoff.strike();
 		const double dt = maturity / static_cast<double>(gridNum);
-		for (std::size_t gridIndex = 1; gridIndex <= gridNum; ++gridIndex) {
+		for (std::size_t gridIndex = 0; gridIndex < gridNum; ++gridIndex) {
 			const double t = gridIndex * dt;
 			const double tau = maturity - t;
 			const double gearing = std::exp(mu * tau) * payoff.gearing();
-			cvaValue += forwardFunction<Dual<double> >(x0Dual,
-				Dual<double>(mu), sigmaDual, gearing, strike, t);
+			cvaValue += europeanFunction(x0Dual,
+				Dual<double>(mu), sigmaDual, gearing, strike, 0.0, t);
 		}
 		return cvaValue;
 	}
@@ -52,7 +56,7 @@ namespace cva {
 		const double strike = payoff.strike();
 		const double shift = payoff.shiftAmount();
 		const double dt = maturity / static_cast<double>(gridNum);
-		for (std::size_t gridIndex = 1; gridIndex <= gridNum; ++gridIndex) {
+		for (std::size_t gridIndex = 0; gridIndex < gridNum; ++gridIndex) {
 			const double gearing = payoff.gearing();
 			const double t = gridIndex * dt;
 			cvaValue += europeanFunction<Dual<double> >(x0Dual,
@@ -75,7 +79,7 @@ namespace cva {
 			: Dual<double>(sigma);
 
 		const double dt = maturity / static_cast<double>(gridNum);
-		for (std::size_t gridIndex = 1; gridIndex <= gridNum; ++gridIndex) {
+		for (std::size_t gridIndex = 0; gridIndex < gridNum; ++gridIndex) {
 			const double gearing = payoff.gearing();
 			const double t = gridIndex * dt;
 			cvaValue += mountain<Dual<double> >(x0Dual,

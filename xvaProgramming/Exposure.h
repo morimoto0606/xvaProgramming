@@ -3,7 +3,8 @@
 #include "Path.h"
 #include "analytic_exposure_traits.h"
 #include "BasisFunctions.h"
-#include "Regression.h"
+#include "Regressor.h"
+#include <boost/numeric/ublas/io.hpp>
 
 namespace ublas = boost::numeric::ublas;
 namespace cva {
@@ -32,36 +33,35 @@ namespace cva {
 		payoff_type _payoff;
 	};
 
-	template <typename V, typename D, typename P>
-	class RegressionExposure : public Exposure<RegressionExposure<V, D, P>> {
+	template <typename T, typename R, typename S, typename P>
+	class RegressionExposure : public Exposure<RegressionExposure<T, R, S, P>> {
 	public:
-		typedef V value_type;
-		typedef BasisFunctions<D> basis_type;
+		typedef T value_type;
+		typedef T result_type;
+		typedef R regression_type;
+		typedef S state_type;
 		typedef P payoff_type;
+		typedef BasisFunctions<state_type> basis_type;
 		typedef ublas::vector<value_type> coefficints_type;
 
 		RegressionExposure(
 			const Path<value_type>& path, 
 			const ublas::vector<basis_type>& basisSeries,
-			const payoff_type& payoff)
-		: _basisSeries(basisSeries), _payoff(payoff)
+			const Regressor<regression_type, payoff_type>& regressor)
+		: _basisSeries(basisSeries),  _regressor(regressor)
 		{
-			_coeffSeries = ublas::vector<coefficints_type>(path.gridNum());
-			for (std::size_t gridIndex = 0; gridIndex < path.gridNum(); ++gridIndex) {
-				_coeffSeries(gridIndex) = regresssion(gridIndex, payoff, path, _basisSeries(gridIndex));
-			}
 		}
-		value_type operator()(const Path<value_type>& path, const std::size_t pathIndex,
+		result_type operator()(const Path<value_type>& path, 
+			const std::size_t pathIndex,
 			const std::size_t gridIndx) const
 		{
-			ublas::vector<value_type> basis 
+			BasisFunctions<state_type>::result_type basisValues
 				= _basisSeries(gridIndx)(path, pathIndex, gridIndx);
-			value_type result = ublas::inner_prod(_coeffSeries(gridIndx), basis);
+			T result = ublas::inner_prod(_regressor.getCoeffs(gridIndx), basisValues);
 			return result;
 		}
 	private:
-		payoff_type _payoff;
 		ublas::vector<basis_type> _basisSeries;
-		ublas::vector<coefficints_type> _coeffSeries;
+		Regressor<regression_type, payoff_type> _regressor;
 	};
 }

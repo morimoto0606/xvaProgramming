@@ -41,12 +41,13 @@ namespace cva{
 	{
 		return sqrt_traits<T>::apply(x);
 	}
-	//template <typename T, std::size_t n>
-	//typename sqrt_traits<T>::result_type sqrt(
-	//	const T& x)
-	//{
-	//	return sqrt_traits<T>::apply(x);
-	//}
+
+	template <typename T>
+	typename power_traits<T>::result_type power(
+		const T& x, const std::size_t order)
+	{
+		return power_traits<T>::apply(x, order);
+	}
 
 	class Monomial {
 	public:
@@ -108,17 +109,17 @@ namespace cva{
 		std::size_t _grid;
 	};
 
-	class PathwiseSum {
+	class TimewiseAverage {
 	public:
-		PathwiseSum(const std::size_t grid, std::size_t order)
+		TimewiseAverage(const std::size_t grid, const std::size_t order)
 			: _grid(grid), _order(order) {}
 
 		template <typename T>
 		typename T::value_type operator()(const ublas::vector_expression<T>& x) const
 		{			
-			return _order == 0.0 
-				? 1.0
-				: std::pow(std::accumulate(x().begin(), x().begin() + _grid + 1, 0.0), _order);
+			if (_order == 0) { return T::value_type(1.0); }
+			const T::value_type ave = average_traits<T::value_type>::apply(x().begin(), x().begin() + _grid, typename T::value_type(0.0));
+			return power(ave, _order);
 		}
 	private:
 		std::size_t _order;

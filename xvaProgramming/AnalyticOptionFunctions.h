@@ -88,10 +88,6 @@ namespace cva {
 	}
 
 	//d/dx E[max(aX(t) + b, 0)]
-	class EuropeanDelta {
-	public:
-	private:
-	};
 	template <typename T>
 	T europeanDelta(const T& x,
 		const T& mu, const T& sigma,

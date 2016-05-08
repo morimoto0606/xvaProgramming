@@ -31,15 +31,15 @@ namespace cva {
 	}
 
 	template <typename T, typename D>
-	ublas::matrix<T> getBasisMatrix(
+	ublas::matrix<D> getBasisMatrix(
 		const std::size_t pathIndex,
 		const std::size_t gridIndex,
 		const Path<T>& path,
 		const BasisFunctions<D>& functions)
 	{
 		const std::size_t basisNum = functions.size();
-		ublas::vector<T> coeffient(basisNum);
-		ublas::matrix<T> basisMatrix(basisNum, basisNum);
+		ublas::vector<D> coeffient(basisNum);
+		ublas::matrix<D> basisMatrix(basisNum, basisNum);
 		for (std::size_t i = 0; i < basisNum; ++i) {
 			for (std::size_t j = 0; j < basisNum; ++j) {
 				basisMatrix(i, j)
@@ -68,7 +68,7 @@ namespace cva {
 	}
 	
 	template <typename T, typename U, typename D>
-	ublas::vector<T> calcPayoffMultBasis(
+	ublas::vector<D> calcPayoffMultBasis(
 		const std::size_t pathIndex,
 		const std::size_t gridIndex,
 		const Path<T>& path,
@@ -77,7 +77,7 @@ namespace cva {
 	{
 		const std::size_t basisNum = functions.size();
 		T payoffValue = payoff()(path.getTimewisePath(pathIndex));
-		ublas::vector<T> payoffMultBasis(basisNum);
+		ublas::vector<D> payoffMultBasis(basisNum);
 		for (std::size_t i = 0; i < basisNum; ++i) {
 			payoffMultBasis(i)
 				= functions(path, pathIndex, gridIndex)(i) * payoffValue;

@@ -5,7 +5,6 @@
 #include "Path.h"
 #include "PayOff.h"
 #include <boost/bind.hpp>
-#include "PathMaker.h"
 
 namespace cva {
 	namespace ublas = boost::numeric::ublas;

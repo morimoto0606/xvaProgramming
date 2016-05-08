@@ -12,9 +12,8 @@ namespace cva {
 		typedef ublas::vector<T> result_type;
 		typedef boost::function<value_type(const value_type&)> function_type;
 
-		template<typename P>
 		static result_type apply(const ublas::vector<function_type>& basisFunction,
-			const Path<P>& path, const size_t pathIndex, const std::size_t gridIndex)
+			const Path<T>& path, const size_t pathIndex, const std::size_t gridIndex)
 		{
 			result_type result(basisFunction.size());
 			for (std::size_t i = 0; i < basisFunction.size(); ++i) {
@@ -30,9 +29,8 @@ namespace cva {
 		typedef ublas::vector<T> result_type;
 		typedef boost::function<result_type(const value_type&)> function_type;
 
-		template<typename P>
 		static result_type apply(const ublas::vector<function_type>& basisFunction,
-			const Path<P>& path, const std::size_t pathIndex, const std::size_t gridIndex)
+			const Path<T>& path, const std::size_t pathIndex, const std::size_t gridIndex)
 		{
 			result_type result(basisFunction.size());
 			for (std::size_t i = 0; i < basisFunction.size(); ++i) {

@@ -157,10 +157,10 @@
     <ClInclude Include="function_traits.h" />
     <ClInclude Include="lsm_exposure_traits.h" />
     <ClInclude Include="Path.h" />
-    <ClInclude Include="PathMaker.h" />
     <ClInclude Include="Payoff.h" />
     <ClInclude Include="promote_traits.h" />
     <ClInclude Include="Regression.h" />
+    <ClInclude Include="Regressor.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="xvaProgramming.h" />

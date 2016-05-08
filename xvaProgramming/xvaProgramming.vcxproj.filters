@@ -30,9 +30,6 @@
     <ClInclude Include="xvaProgramming.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="PathMaker.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Payoff.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -76,6 +73,9 @@
       <Filter>ヘッダー ファイル\Exposure</Filter>
     </ClInclude>
     <ClInclude Include="BasisFunctions.h">
+      <Filter>ヘッダー ファイル\Exposure</Filter>
+    </ClInclude>
+    <ClInclude Include="Regressor.h">
       <Filter>ヘッダー ファイル\Exposure</Filter>
     </ClInclude>
   </ItemGroup>

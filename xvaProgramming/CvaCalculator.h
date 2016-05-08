@@ -7,7 +7,7 @@
 #include "Regression.h"
 #include "Exposure.h"
 #include <boost/bind.hpp>
-#include "PathMaker.h"
+#include <boost/numeric/ublas/io.hpp>
 
 namespace cva {
 	namespace ublas = boost::numeric::ublas;
@@ -54,8 +54,8 @@ namespace cva {
 			for (std::size_t pathIndex = 0;
 			pathIndex < path.pathNum(); ++pathIndex) {
 				T pathwiseValue(0.0);
-				for (std::size_t gridIndex = 1;
-				gridIndex <= path.gridNum(); ++gridIndex) {
+				for (std::size_t gridIndex = 0;
+				gridIndex < path.gridNum(); ++gridIndex) {
 					if (exposure()(path, pathIndex, gridIndex) > 0.0) {
 						pathwiseValue +=
 							payoff()(path.getTimewisePath(pathIndex));

@@ -128,6 +128,23 @@ namespace cva {
 		double _b4;
 		double _c;
 	};
+
+	class Asian : public PayOff<Asian> {
+	public:
+		Asian(const double a, const double b) : _a(a), _b(b) {}
+		
+		template <typename T>
+		typename T::value_type operator()(
+			const ublas::vector_expression<T>& x) const
+		{
+			std::size_t gridNum = x().size();
+			TimewiseAverage average{ gridNum, 1 };
+			return _a * average(x) - _b;
+		}
+	private:
+		double _a;
+		double _b;
+	};
 } // namespace cva
 
 #endif
