@@ -133,4 +133,23 @@ namespace cva {
 			- europeanFunction(x, mu, sigma, a, strikes(2), 0.0, maturity)
 			+ europeanFunction(x, mu, sigma, a, strikes(3), 0.0, maturity) + c;
 	}
+
+	//   E[a(X(t0)+...X(tn)) - b|X(t0)=x0,...,X(ti)=xi]
+	// = a(x0+...xi) + a(exp(mu(ti+1 - ti)) + ... + exp(mu(tn - ti))) xi - b
+	template <typename T>
+	T asian(const ublas::vector<T>& timewisePath,
+		const ublas::vector<double> taus,
+		const T& mu,
+		const double a, const double b,
+		const std::size_t gridIndex,
+		const std::size_t gridNum)
+	{
+		TimewiseAverage average(gridIndex, 1);
+		const double coeff1 = a * static_cast<double>(gridIndex + 1) 
+			/ static_cast<double>(gridNum + 1);
+		const double coeff2 = a / static_cast<double>(gridNum + 1);
+		T coeff3(0.0);
+		std::for_each(taus.begin(), taus.end(), [&coeff3, &mu](const double tau) mutable->void {coeff3 += exp(mu * tau); });
+		return coeff1 * average(timewisePath) + coeff2 * coeff3 * timewisePath(gridIndex);
+	}
 } // namespace cva

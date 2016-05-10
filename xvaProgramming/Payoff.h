@@ -141,6 +141,10 @@ namespace cva {
 			TimewiseAverage average{ gridNum, 1 };
 			return _a * average(x) - _b;
 		}
+
+		double gearing() const { return _a; }
+		double strike() const { return _b; }
+
 	private:
 		double _a;
 		double _b;
