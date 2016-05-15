@@ -9,8 +9,9 @@ namespace cva {
 	template <typename T>
 	struct basis_function_traits {
 		typedef T value_type;
+		typedef T state_type;
 		typedef ublas::vector<T> result_type;
-		typedef boost::function<value_type(const value_type&)> function_type;
+		typedef boost::function<state_type(const value_type&)> function_type;
 
 		static result_type apply(const ublas::vector<function_type>& basisFunction,
 			const Path<T>& path, const size_t pathIndex, const std::size_t gridIndex)
@@ -26,8 +27,9 @@ namespace cva {
 	template <typename T>
 	struct basis_function_traits<ublas::vector<T>> {
 		typedef ublas::vector<T> value_type;
+		typedef T state_type;
 		typedef ublas::vector<T> result_type;
-		typedef boost::function<result_type(const value_type&)> function_type;
+		typedef boost::function<state_type(const value_type&)> function_type;
 
 		static result_type apply(const ublas::vector<function_type>& basisFunction,
 			const Path<T>& path, const std::size_t pathIndex, const std::size_t gridIndex)
@@ -44,8 +46,9 @@ namespace cva {
 	class BasisFunctions {
 	public:
 		typedef T value_type;
+		typedef typename basis_function_traits<value_type>::state_type state_type;
 		typedef typename basis_function_traits<value_type>::result_type result_type;
-		typedef boost::function<value_type(const value_type&)> function_type;
+		typedef boost::function<state_type(const value_type&)> function_type;
 
 		BasisFunctions() {}
 		explicit BasisFunctions(const ublas::vector<function_type>& basisFunctions)

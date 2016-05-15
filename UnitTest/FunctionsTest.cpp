@@ -35,7 +35,7 @@ namespace UnitTest
 			//double
 			{
 				double d = foo(x);
-				double expect = (x(0) + x(1) + x(2) + x(3)) / 4.0;
+				double expect = (x(0) + x(1) + x(2) + x(3) + x(4)) / 5.0;
 				Assert::AreEqual(expect, d, 1e-5);
 			}
 			ublas::vector<double> y(5);
@@ -52,12 +52,12 @@ namespace UnitTest
 					z(i) = cva::Dual<double>(x(i), y(i));
 				}
 				Dual<double> d = foo(z);
-				double expectV = (x(0) + x(1) + x(2) + x(3)) / 4.0;
-				double expectD= (y(0) + y(1) + y(2) + y(3)) / 4.0;
+				double expectV = (x(0) + x(1) + x(2) + x(3) + x(4)) / 5.0;
+				double expectD= (y(0) + y(1) + y(2) + y(3) + y(4)) / 5.0;
 				Assert::AreEqual(expectV, d.value(), 1e-2);
 				Assert::AreEqual(expectD, d.deriv(), 1e-2);
 			}
-			cva::TimewiseAverage buz(5, 2);
+			cva::TimewiseAverage buz(3, 2);
 			//Dual<double> 
 			{
 				ublas::vector <cva::Dual<double>> z(5);
@@ -65,8 +65,8 @@ namespace UnitTest
 					z(i) = cva::Dual<double>(x(i), y(i));
 				}
 				Dual<double> d = buz(z);
-				double aveV = (x(0) + x(1) + x(2) + x(3) + x(4)) / 5.0;
-				double aveD = (y(0) + y(1) + y(2) + y(3) + y(4)) / 5.0;
+				double aveV = (x(0) + x(1) + x(2) + x(3)) / 4.0;
+				double aveD = (y(0) + y(1) + y(2) + y(3)) / 4.0;
 				double expectV = std::pow(aveV, 2);
 				double expectD = 2.0 * aveV * aveD;
 

@@ -62,13 +62,13 @@ namespace UnitTest
 			cva::Dual<double> cva2 = cva::calcCvaByAnalyticExposure(
 				path, payoff, cva::ImplicitCalculator{});
 
-			Assert::AreEqual(	350.204,	cva2.value(), 1e-2);
+			Assert::AreEqual(350.204,	cva2.value(), 1e-2);
 			Assert::AreEqual(6.64204, cva2.deriv(), 1e-2);
 		}
 
 		TEST_METHOD(CvaAnalyticExposureAsian)
 		{
-			cva::Asian payoff(1.0, 120.0);
+			cva::Asian payoff(1.0, 100.0);
 			cva::Dual<double> x(100, 1.0);
 			cva::Dual<double> sigma(0.3);
 			cva::Dual<double> mu(0.0);
@@ -84,14 +84,14 @@ namespace UnitTest
 			cva::Dual<double> cva1 = cva::calcCvaByAnalyticExposure(
 				path, payoff, cva::ExplicitCalculator{});
 
-			Assert::AreEqual(374.765, cva1.value(), 1e-2);
-			Assert::AreEqual(6.98343, cva1.deriv(), 1e-2);
+			Assert::AreEqual(172.15961465238428, cva1.value(), 1e-2);
+			Assert::AreEqual(6.3285961465238341, cva1.deriv(), 1e-2);
 
 			cva::Dual<double> cva2 = cva::calcCvaByAnalyticExposure(
 				path, payoff, cva::ImplicitCalculator{});
 
-			Assert::AreEqual(350.204, cva2.value(), 1e-2);
-			Assert::AreEqual(6.64204, cva2.deriv(), 1e-2);
+			Assert::AreEqual(169.74907011287286, cva2.value(), 1e-2);
+			Assert::AreEqual(6.3044907011287279, cva2.deriv(), 1e-2);
 		}
 	};
 }

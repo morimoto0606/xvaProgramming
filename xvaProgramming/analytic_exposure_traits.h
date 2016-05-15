@@ -92,9 +92,9 @@ namespace cva {
 		{
 			const std::size_t gridNum = path.gridNum();
 			const double maturity = path.maturity();
-			ublas::vector<double> taus(gridNum);
-			for (std::size_t i = gridIndex; i < gridNum; ++i) {
-				taus(i) = path.dt() * static_cast<double>(i + 1 - gridIndex);
+			ublas::vector<double> taus(gridNum - gridIndex);
+			for (std::size_t i = 0; i < gridNum -gridIndex; ++i) {
+				taus(i) = path.dt() * static_cast<double>(i + 1);
 			}
 			return asian<T>(path.getTimewisePath(pathIndex),
 				taus, path.mu(),

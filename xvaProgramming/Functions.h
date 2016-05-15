@@ -118,7 +118,8 @@ namespace cva{
 		typename T::value_type operator()(const ublas::vector_expression<T>& x) const
 		{			
 			if (_order == 0) { return T::value_type(1.0); }
-			const T::value_type ave = average_traits<T::value_type>::apply(x().begin(), x().begin() + _grid, typename T::value_type(0.0));
+			const T::value_type ave = average_traits<T::value_type>::apply(
+				x().begin(), x().begin() + _grid + 1, typename T::value_type(0.0));
 			return power(ave, _order);
 		}
 	private:

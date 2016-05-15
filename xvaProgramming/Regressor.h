@@ -19,11 +19,12 @@ namespace {
 
 }
 namespace cva {
-	template <typename T, typename P>
+	template <typename T, typename P, typename U = T>
 	class Regressor {
 	public:
 		typedef T value_type;
-		typedef BasisFunctions<T> basis_type;
+		typedef U basis_state_type;
+		typedef BasisFunctions<basis_state_type> basis_type;
 		typedef P payoff_type;
 		typedef ublas::vector<value_type> coefficints_type;
 

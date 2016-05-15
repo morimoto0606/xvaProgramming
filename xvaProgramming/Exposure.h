@@ -33,21 +33,22 @@ namespace cva {
 		payoff_type _payoff;
 	};
 
-	template <typename T, typename R, typename S, typename P>
-	class RegressionExposure : public Exposure<RegressionExposure<T, R, S, P>> {
+	template <typename T, typename R, typename S, typename B, typename P>
+	class RegressionExposure : public Exposure<RegressionExposure<T, R, S, B, P>> {
 	public:
 		typedef T value_type;
 		typedef T result_type;
 		typedef R regression_type;
 		typedef S state_type;
+		typedef B basis_state_type;
 		typedef P payoff_type;
-		typedef BasisFunctions<state_type> basis_type;
+		typedef BasisFunctions<basis_state_type> basis_type;
 		typedef ublas::vector<value_type> coefficints_type;
 
 		RegressionExposure(
 			const Path<value_type>& path, 
 			const ublas::vector<basis_type>& basisSeries,
-			const Regressor<regression_type, payoff_type>& regressor)
+			const Regressor<regression_type, payoff_type, state_type>& regressor)
 		: _basisSeries(basisSeries),  _regressor(regressor)
 		{
 		}
@@ -55,13 +56,13 @@ namespace cva {
 			const std::size_t pathIndex,
 			const std::size_t gridIndx) const
 		{
-			BasisFunctions<state_type>::result_type basisValues
+			basis_type::result_type basisValues
 				= _basisSeries(gridIndx)(path, pathIndex, gridIndx);
 			T result = ublas::inner_prod(_regressor.getCoeffs(gridIndx), basisValues);
 			return result;
 		}
 	private:
 		ublas::vector<basis_type> _basisSeries;
-		Regressor<regression_type, payoff_type> _regressor;
+		Regressor<regression_type, payoff_type, state_type> _regressor;
 	};
 }

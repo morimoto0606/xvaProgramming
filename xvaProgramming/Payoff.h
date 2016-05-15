@@ -137,7 +137,7 @@ namespace cva {
 		typename T::value_type operator()(
 			const ublas::vector_expression<T>& x) const
 		{
-			std::size_t gridNum = x().size();
+			std::size_t gridNum = x().size() - 1;
 			TimewiseAverage average{ gridNum, 1 };
 			return _a * average(x) - _b;
 		}

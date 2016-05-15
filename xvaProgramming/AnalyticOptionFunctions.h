@@ -150,6 +150,6 @@ namespace cva {
 		const double coeff2 = a / static_cast<double>(gridNum + 1);
 		T coeff3(0.0);
 		std::for_each(taus.begin(), taus.end(), [&coeff3, &mu](const double tau) mutable->void {coeff3 += exp(mu * tau); });
-		return coeff1 * average(timewisePath) + coeff2 * coeff3 * timewisePath(gridIndex);
+		return coeff1 * average(timewisePath) + coeff2 * coeff3 * timewisePath(gridIndex) - b;
 	}
 } // namespace cva
