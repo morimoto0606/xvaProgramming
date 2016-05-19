@@ -44,7 +44,7 @@ namespace UnitTest
 			y(2) = 0.069354385784;
 			y(3) = -1.3243;
 			y(4) = 3.35482;
-			
+
 			//Dual<double> 
 			{
 				ublas::vector <cva::Dual<double>> z(5);
@@ -53,7 +53,7 @@ namespace UnitTest
 				}
 				Dual<double> d = foo(z);
 				double expectV = (x(0) + x(1) + x(2) + x(3) + x(4)) / 5.0;
-				double expectD= (y(0) + y(1) + y(2) + y(3) + y(4)) / 5.0;
+				double expectD = (y(0) + y(1) + y(2) + y(3) + y(4)) / 5.0;
 				Assert::AreEqual(expectV, d.value(), 1e-2);
 				Assert::AreEqual(expectD, d.deriv(), 1e-2);
 			}
@@ -72,6 +72,16 @@ namespace UnitTest
 
 				Assert::AreEqual(expectV, d.value(), 1e-2);
 				Assert::AreEqual(expectD, d.deriv(), 1e-2);
+			}
+		}
+
+		TEST_METHOD(sigmoid)
+		{
+			Dual<double> x(0.01, 1.0);
+			Dual<double> s1 = cva::sigmoid(x, 10.0);
+
+			for (std::size_t i = 0; i < 20; ++i) {
+				double s = cva::sigmoid((10 - i) * 0.1, 10.0);
 			}
 		}
 	};
