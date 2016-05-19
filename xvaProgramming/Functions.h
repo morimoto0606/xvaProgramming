@@ -8,28 +8,28 @@
 namespace ublas = boost::numeric::ublas;
 namespace cva{
 	template <typename T>
-	typename zero_floor_traits<T>::value_type
+	typename zero_floor_traits<T>::result_type
 		zeroFloor(const T& x)
 	{
 		return zero_floor_traits<T>::apply(x);
 	}
 	
 	template <typename T>
-	typename exp_traits<T>::value_type
+	typename exp_traits<T>::result_type
 		exp(const T& x)
 	{
 		return exp_traits<T>::apply(x);
 	}
 
 	template <typename T>
-	typename log_traits<T>::value_type
+	typename log_traits<T>::result_type
 		log(const T& x)
 	{
 		return log_traits<T>::apply(x);
 	}
 
 	template <typename T>
-	typename normal_cdf_traits<T>::value_type
+	typename normal_cdf_traits<T>::result_type
 		normalCdf(const T& x)
 	{
 		return normal_cdf_traits<T>::apply(x);
@@ -47,6 +47,14 @@ namespace cva{
 		const T& x, const std::size_t order)
 	{
 		return power_traits<T>::apply(x, order);
+	}
+
+	template <typename T>
+	typename exp_traits<T>::result_type sigmoid(
+		const T& x, const double a)
+	{
+		return exp_traits<T>::value_type(1.0)
+			/ (exp_traits<T>::value_type(1.0) + exp_traits<T>::apply(-a * x));
 	}
 
 	class Monomial {

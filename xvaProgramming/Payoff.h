@@ -149,6 +149,29 @@ namespace cva {
 		double _a;
 		double _b;
 	};
+
+	class Trf : public PayOff<Trf> {
+	public:
+		Trf(const double a, const double b, const double c)
+			: _a(a), _b(b), _c(c) {}
+
+		template <typename T>
+		typename T::value_type operator()(
+			const ublas::vector_expression<T>& x) const
+		{
+			std::size_t gridNum = x().size() - 1;
+			TimewiseAverage average{ gridNum, 1 };
+			return (_a * *(x().end() - 1) - _b) * sigmoid(average(x()) - _c, 10);
+		}
+
+		double gearing() const { return _a; }
+		double strike() const { return _b; }
+
+	private:
+		double _a;
+		double _b;
+		double _c;
+	};
 } // namespace cva
 
 #endif
