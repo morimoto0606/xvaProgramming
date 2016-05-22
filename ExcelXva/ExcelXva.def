@@ -1,0 +1,4 @@
+LIBRARY	"ExcelXva"
+EXPORTS
+	Add
+	calcCvaLsmExposureEuropean
