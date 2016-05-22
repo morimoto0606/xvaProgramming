@@ -179,5 +179,14 @@ namespace cva {
 		}
 	};
 
+	template <typename T>
+	struct sigmoid_traits {
+		typedef T value_type;
+		typedef T result_type;
+		static const result_type apply(const value_type& x, const double a) {
+			return 
+		}
+	};
+
 } //namespace cva
 #endif
