@@ -75,7 +75,7 @@ namespace UnitTest
 
 			const double maturity = 10.0;
 			const std::size_t gridNum = 10;
-			const std::size_t pathNum = 1000;
+			const std::size_t pathNum = 100000;
 			const double dt = maturity / gridNum;
 			std::size_t seed = 1;
 			const cva::Path<cva::Dual<double>> path(
@@ -84,14 +84,14 @@ namespace UnitTest
 			cva::Dual<double> cva1 = cva::calcCvaByAnalyticExposure(
 				path, payoff, cva::ExplicitCalculator{});
 
-			Assert::AreEqual(172.15961465238428, cva1.value(), 1e-2);
-			Assert::AreEqual(6.3285961465238341, cva1.deriv(), 1e-2);
+			Assert::AreEqual(162.69246564309589, cva1.value(), 1e-2);
+			Assert::AreEqual(6.1509546564309039, cva1.deriv(), 1e-2);
 
 			cva::Dual<double> cva2 = cva::calcCvaByAnalyticExposure(
 				path, payoff, cva::ImplicitCalculator{});
 
-			Assert::AreEqual(169.74907011287286, cva2.value(), 1e-2);
-			Assert::AreEqual(6.3044907011287279, cva2.deriv(), 1e-2);
+			Assert::AreEqual(162.85726566410949, cva2.value(), 1e-2);
+			Assert::AreEqual(6.1526026566410037, cva2.deriv(), 1e-2);
 		}
 	};
 }
