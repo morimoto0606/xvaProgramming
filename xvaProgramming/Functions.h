@@ -107,11 +107,12 @@ namespace cva{
 		: _grid(grid), _order(order) {}
 		
 		template <typename T>
-		typename T::value_type
-			operator()(const ublas::vector_expression<T>& x) const
+		typename T::value_type operator()(const ublas::vector_expression<T>& x) const
 		{
-			return _order == 0.0 ? 1.0 : std::pow((x()(_grid)), _order);
+			if (_order == 0) { return T::value_type(1.0); }
+			return power((x()(_grid)), _order);
 		}
+
 	private:
 		std::size_t _order;
 		std::size_t _grid;
